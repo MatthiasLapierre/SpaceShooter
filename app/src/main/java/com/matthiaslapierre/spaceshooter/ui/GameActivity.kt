@@ -123,6 +123,10 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
         soundEngine.playShotHit()
     }
 
+    override fun onPowerUpWin() {
+        soundEngine.playGetPowerUp()
+    }
+
     override fun onMeteorExplode() {
         soundEngine.playMeteorExplode()
     }

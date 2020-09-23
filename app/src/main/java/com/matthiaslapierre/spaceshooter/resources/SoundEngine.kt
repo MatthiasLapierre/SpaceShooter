@@ -22,10 +22,9 @@ class SoundEngine(
         private const val SOUND_CRASH = 1
         private const val SOUND_METEOR_EXPLODE = 2
         private const val SOUND_SHIP_EXPLODE = 3
-        private const val SOUND_HANDLE_COINS = 4
+        private const val SOUND_GET_POWER_UP = 4
         private const val SOUND_GAME_OVER = 5
         private const val SOUND_SHOT_HIT = 6
-        private const val SOUND_ZAP = 7
 
         private const val MUSIC_MENU = "musics/menu.ogg"
         private const val MUSIC_PLAY = "musics/play.ogg"
@@ -33,7 +32,7 @@ class SoundEngine(
     }
 
     private val soundPool: SoundPool
-    private val sounds: Array<Int?> = arrayOfNulls(8)
+    private val sounds: Array<Int?> = arrayOfNulls(7)
     private var player: MediaPlayer? = null
 
     init {
@@ -65,10 +64,9 @@ class SoundEngine(
             sounds[SOUND_CRASH] = soundPool.load(assets.openFd("sounds/sfx_crash.ogg"), 1)
             sounds[SOUND_METEOR_EXPLODE] = soundPool.load(assets.openFd("sounds/sfx_explode_meteor.ogg"), 1)
             sounds[SOUND_SHIP_EXPLODE] = soundPool.load(assets.openFd("sounds/sfx_explode_ship.ogg"), 1)
-            sounds[SOUND_HANDLE_COINS] = soundPool.load(assets.openFd("sounds/sfx_handle_coins1.ogg"), 1)
+            sounds[SOUND_GET_POWER_UP] = soundPool.load(assets.openFd("sounds/sfx_handle_coins1.ogg"), 1)
             sounds[SOUND_GAME_OVER] = soundPool.load(assets.openFd("sounds/sfx_lose.ogg"), 1)
             sounds[SOUND_SHOT_HIT] = soundPool.load(assets.openFd("sounds/sfx_shot_hit.ogg"), 1)
-            sounds[SOUND_ZAP] = soundPool.load(assets.openFd("sounds/sfx_zap.ogg"), 1)
         }).start()
     }
 
@@ -100,7 +98,7 @@ class SoundEngine(
     fun playCrash() = playSound(SOUND_CRASH)
     fun playMeteorExplode() = playSound(SOUND_METEOR_EXPLODE)
     fun playShipExplode() = playSound(SOUND_SHIP_EXPLODE)
-    fun playGetCoins() = playSound(SOUND_HANDLE_COINS)
+    fun playGetPowerUp() = playSound(SOUND_GET_POWER_UP)
     fun playGameOver() = playSound(SOUND_GAME_OVER)
     fun playShotHit() = playSound(SOUND_SHOT_HIT)
 

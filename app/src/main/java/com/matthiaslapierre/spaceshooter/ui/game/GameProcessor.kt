@@ -15,7 +15,6 @@ import com.matthiaslapierre.spaceshooter.resources.Scores
 import com.matthiaslapierre.spaceshooter.resources.TypefaceHelper
 import com.matthiaslapierre.spaceshooter.ui.game.sprite.*
 import com.matthiaslapierre.spaceshooter.util.Utils
-import kotlin.math.max
 
 class GameProcessor(
     private val context: Context,
@@ -253,6 +252,7 @@ class GameProcessor(
                         PowerUpSprite.TYPE_STAR -> points += 10
                         else -> points += 10
                     }
+                    gameInterface?.onPowerUpWin()
                 }
             }
         }
@@ -459,11 +459,11 @@ class GameProcessor(
         when(n) {
             -1 -> {
                 x = -screenWidth * 0.5f
-                y = Utils.getRandomFloat(0f, screenHeight * 0.5f)
+                y = Utils.getRandomFloat(0f, screenHeight * 0.45f)
             }
             1 -> {
                 x = screenWidth * 1.5f
-                y = Utils.getRandomFloat(0f, screenHeight * 0.5f)
+                y = Utils.getRandomFloat(0f, screenHeight * 0.45f)
             }
             else -> {
                 x = Utils.getRandomFloat(0f, screenWidth)
@@ -636,6 +636,7 @@ class GameProcessor(
         fun onGameStart()
         fun onGameOver()
         fun onHit()
+        fun onPowerUpWin()
         fun onMeteorExplode()
         fun onShipExplode()
     }
