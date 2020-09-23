@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Space Shooter</string>
+    <string name="press_to_start">Press to start</string>
+    <string name="game_over">Game Over</string>
+    <string name="last_score_params">Last score: %d</string>
+    <string name="best_score_params">Best score: %d</string>
+    <string name="replay">Replay</string>
+    <string name="score">Score</string>
+    <string name="level">Level</string>
+</resources>

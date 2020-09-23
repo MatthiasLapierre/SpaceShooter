@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#800080</color>
+    <color name="lifeIndicatorProgress">#08EB08</color>
+    <color name="lifeIndicatorBackground">#A4AEAF</color>
+    <color name="buttonTitleTextColor">#36BBF5</color>
+    <color name="indicatorTextColor">#FFFFFF</color>
+</resources>
