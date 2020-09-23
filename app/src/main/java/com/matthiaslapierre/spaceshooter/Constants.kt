@@ -46,11 +46,6 @@ object Constants {
     const val LEVEL_DURATION_IN_SECONDS = 15
 
     /**
-     *
-     */
-    const val METEORS_MULTIPLIER = 2
-
-    /**
      * Rate of fire.
      */
     const val ENEMY_RATE_OF_FIRE = 1

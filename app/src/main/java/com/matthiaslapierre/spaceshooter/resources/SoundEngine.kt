@@ -18,25 +18,14 @@ class SoundEngine(
 ) {
 
     companion object{
-        private const val SOUND_BTN_PRESS_1 = 0
-        private const val SOUND_BTN_PRESS_2 = 1
-        private const val SOUND_CRASH = 2
-        private const val SOUND_METEOR_EXPLODE = 3
-        private const val SOUND_SHIP_EXPLODE = 4
-        private const val SOUND_HANDLE_COINS_1 = 5
-        private const val SOUND_HANDLE_COINS_2 = 6
-        private const val SOUND_LASER_1 = 7
-        private const val SOUND_LASER_2 = 8
-        private const val SOUND_LASER_3 = 9
-        private const val SOUND_LASER_4 = 10
-        private const val SOUND_LASER_5 = 11
-        private const val SOUND_LASER_6 = 12
-        private const val SOUND_LASER_7 = 13
-        private const val SOUND_LASER_8 = 14
-        private const val SOUND_LASER_9 = 15
-        private const val SOUND_GAME_OVER = 16
-        private const val SOUND_SHOT_HIT = 17
-        private const val SOUND_ZAP = 18
+        private const val SOUND_BTN_PRESS = 0
+        private const val SOUND_CRASH = 1
+        private const val SOUND_METEOR_EXPLODE = 2
+        private const val SOUND_SHIP_EXPLODE = 3
+        private const val SOUND_HANDLE_COINS = 4
+        private const val SOUND_GAME_OVER = 5
+        private const val SOUND_SHOT_HIT = 6
+        private const val SOUND_ZAP = 7
 
         private const val MUSIC_MENU = "musics/menu.ogg"
         private const val MUSIC_PLAY = "musics/play.ogg"
@@ -44,7 +33,7 @@ class SoundEngine(
     }
 
     private val soundPool: SoundPool
-    private val sounds: Array<Int?> = arrayOfNulls(19)
+    private val sounds: Array<Int?> = arrayOfNulls(8)
     private var player: MediaPlayer? = null
 
     init {
@@ -72,22 +61,11 @@ class SoundEngine(
      */
     fun load() {
         Thread(Runnable {
-            sounds[SOUND_BTN_PRESS_1] = soundPool.load(assets.openFd("sounds/sfx_btn_press1.ogg"), 1)
-            sounds[SOUND_BTN_PRESS_2] = soundPool.load(assets.openFd("sounds/sfx_btn_press2.ogg"), 1)
+            sounds[SOUND_BTN_PRESS] = soundPool.load(assets.openFd("sounds/sfx_btn_press1.ogg"), 1)
             sounds[SOUND_CRASH] = soundPool.load(assets.openFd("sounds/sfx_crash.ogg"), 1)
             sounds[SOUND_METEOR_EXPLODE] = soundPool.load(assets.openFd("sounds/sfx_explode_meteor.ogg"), 1)
             sounds[SOUND_SHIP_EXPLODE] = soundPool.load(assets.openFd("sounds/sfx_explode_ship.ogg"), 1)
-            sounds[SOUND_HANDLE_COINS_1] = soundPool.load(assets.openFd("sounds/sfx_handle_coins1.ogg"), 1)
-            sounds[SOUND_HANDLE_COINS_2] = soundPool.load(assets.openFd("sounds/sfx_handle_coins2.ogg"), 1)
-            sounds[SOUND_LASER_1] = soundPool.load(assets.openFd("sounds/sfx_laser.ogg"), 1)
-            sounds[SOUND_LASER_2] = soundPool.load(assets.openFd("sounds/sfx_laser.ogg"), 1)
-            sounds[SOUND_LASER_3] = soundPool.load(assets.openFd("sounds/sfx_laser.ogg"), 1)
-            sounds[SOUND_LASER_4] = soundPool.load(assets.openFd("sounds/sfx_laser.ogg"), 1)
-            sounds[SOUND_LASER_5] = soundPool.load(assets.openFd("sounds/sfx_laser.ogg"), 1)
-            sounds[SOUND_LASER_6] = soundPool.load(assets.openFd("sounds/sfx_laser.ogg"), 1)
-            sounds[SOUND_LASER_7] = soundPool.load(assets.openFd("sounds/sfx_laser.ogg"), 1)
-            sounds[SOUND_LASER_8] = soundPool.load(assets.openFd("sounds/sfx_laser.ogg"), 1)
-            sounds[SOUND_LASER_9] = soundPool.load(assets.openFd("sounds/sfx_laser.ogg"), 1)
+            sounds[SOUND_HANDLE_COINS] = soundPool.load(assets.openFd("sounds/sfx_handle_coins1.ogg"), 1)
             sounds[SOUND_GAME_OVER] = soundPool.load(assets.openFd("sounds/sfx_lose.ogg"), 1)
             sounds[SOUND_SHOT_HIT] = soundPool.load(assets.openFd("sounds/sfx_shot_hit.ogg"), 1)
             sounds[SOUND_ZAP] = soundPool.load(assets.openFd("sounds/sfx_zap.ogg"), 1)
@@ -104,19 +82,34 @@ class SoundEngine(
         stopMusic()
     }
 
-    fun playBtnPress1() = playSound(SOUND_BTN_PRESS_1)
-    fun playBtnPress2() = playSound(SOUND_BTN_PRESS_2)
+    /**
+     * Resumes the music.
+     */
+    fun resume() {
+        player?.start()
+    }
+
+    /**
+     * Pauses the music.
+     */
+    fun pause() {
+        player?.pause()
+    }
+
+    fun playBtnPress() = playSound(SOUND_BTN_PRESS)
     fun playCrash() = playSound(SOUND_CRASH)
     fun playMeteorExplode() = playSound(SOUND_METEOR_EXPLODE)
     fun playShipExplode() = playSound(SOUND_SHIP_EXPLODE)
-    fun playGetCoins(level: Int = 0) = playSound(SOUND_HANDLE_COINS_1 + level)
-    fun playLaser(level: Int = 0) = playSound(SOUND_LASER_1 + level)
+    fun playGetCoins() = playSound(SOUND_HANDLE_COINS)
     fun playGameOver() = playSound(SOUND_GAME_OVER)
     fun playShotHit() = playSound(SOUND_SHOT_HIT)
-    fun playZap() = playSound(SOUND_ZAP)
+
     fun playMenuMusic() = playMusic(MUSIC_MENU)
+
     fun playPlayMusic() = playMusic(MUSIC_PLAY)
+
     fun playGameOverMusic() = playMusic(MUSIC_GAME_OVER)
+
     fun stopMusic() {
         if(player != null) {
             player?.release()

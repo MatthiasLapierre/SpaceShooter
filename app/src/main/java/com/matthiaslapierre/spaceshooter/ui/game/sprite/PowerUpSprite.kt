@@ -13,7 +13,7 @@ import com.matthiaslapierre.spaceshooter.util.Utils
 class PowerUpSprite(
     context: Context,
     drawables: Drawables,
-    private val type: Int,
+    val type: Int,
     private val x: Float,
     private var y: Float
 ) : ISprite, IConsumable {
@@ -40,7 +40,7 @@ class PowerUpSprite(
 
     override fun onDraw(canvas: Canvas, globalPaint: Paint, status: Int) {
         val screenHeight = canvas.height
-        isAlive = status == ISprite.STATUS_PLAY && y >= 0 && y <= screenHeight && !isConsumed
+        isAlive = status == ISprite.STATUS_PLAY && y < screenHeight && !isConsumed
 
         if(status == ISprite.STATUS_PLAY) {
             y += speed

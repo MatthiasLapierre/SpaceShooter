@@ -13,21 +13,36 @@ import com.matthiaslapierre.spaceshooter.util.Utils
 
 class PlayerSprite(
     context: Context,
-    drawables: Drawables
+    private val drawables: Drawables
 ): ISprite, ILiving {
 
     var x: Float = UNDEFINED
     var y: Float = UNDEFINED
     var lastShotTimestamp: Long = 0L
+    var type: Int = 1
+        set(value) {
+            field = if(value > 3) {
+                3
+            } else {
+                value
+            }
+            drawable = drawables.getPlayerShip(type)
+        }
     override var life: Int = PLAYER_MAX_LIFE
         set(value) {
-            field = if(value > 0) {
-                value
-            } else {
-                0
+            field = when {
+                value > PLAYER_MAX_LIFE -> {
+                    PLAYER_MAX_LIFE
+                }
+                value > 0 -> {
+                    value
+                }
+                else -> {
+                    0
+                }
             }
         }
-    private var drawable = drawables.getPlayerShip()
+    private var drawable = drawables.getPlayerShip(type)
     private var width: Float = Utils.getDimenInPx(context, R.dimen.playerShipWidth)
     private var height: Float = width * drawable.intrinsicHeight / drawable.intrinsicWidth
     private val initialBottom = Utils.getDimenInPx(context, R.dimen.playerShipInitialBottom)
@@ -73,6 +88,10 @@ class PlayerSprite(
 
     override fun onCleared() {
 
+    }
+
+    fun upgrate() {
+        type++
     }
 
 }

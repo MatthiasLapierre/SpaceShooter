@@ -4,7 +4,6 @@ import android.graphics.Paint
 import android.graphics.PixelFormat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
@@ -15,11 +14,11 @@ import com.matthiaslapierre.spaceshooter.resources.Drawables
 import com.matthiaslapierre.spaceshooter.resources.Scores
 import com.matthiaslapierre.spaceshooter.resources.SoundEngine
 import com.matthiaslapierre.spaceshooter.resources.TypefaceHelper
-import com.matthiaslapierre.spaceshooter.ui.game.DrawingThread
+import com.matthiaslapierre.spaceshooter.ui.game.GameProcessor
 import kotlinx.android.synthetic.main.activity_game.*
 
 class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchListener,
-    DrawingThread.GameInterface {
+    GameProcessor.GameInterface {
 
     companion object {
         private const val TAG = "GameActivity"
@@ -29,6 +28,7 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
     private lateinit var typefaceHelper: TypefaceHelper
     private lateinit var soundEngine: SoundEngine
     private lateinit var scores: Scores
+    private lateinit var gameProcessor: GameProcessor
 
     private lateinit var holder: SurfaceHolder
     private val globalPaint: Paint by lazy {
@@ -36,7 +36,7 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
         paint
     }
     private var surfaceCreated: Boolean = false
-    private var drawingThread: DrawingThread? = null
+    private var drawingThread: Thread? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,10 +57,33 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
         surfaceView.setOnTouchListener(this)
         holder.addCallback(this)
         holder.setFormat(PixelFormat.TRANSLUCENT)
+
+        gameProcessor = GameProcessor(
+            applicationContext,
+            holder,
+            globalPaint,
+            drawables,
+            typefaceHelper,
+            scores,
+            this@GameActivity
+        )
+    }
+
+    override fun onResume() {
+        super.onResume()
+        gameProcessor.resume()
+        soundEngine.resume()
+    }
+
+    override fun onPause() {
+        soundEngine.pause()
+        gameProcessor.pause()
+        super.onPause()
     }
 
     override fun onDestroy() {
         soundEngine.release()
+        gameProcessor.clean()
         super.onDestroy()
     }
 
@@ -80,17 +103,18 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         event?.let {
-            drawingThread?.onTouch(event)
+            gameProcessor.onTouch(event)
         }
         return true
     }
 
     override fun onGameStart() {
-        soundEngine.playBtnPress1()
+        soundEngine.playBtnPress()
         soundEngine.playPlayMusic()
     }
 
     override fun onGameOver() {
+        soundEngine.playCrash()
         soundEngine.playGameOver()
         soundEngine.playGameOverMusic()
     }
@@ -103,8 +127,8 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
         soundEngine.playMeteorExplode()
     }
 
-    override fun onShot() {
-        soundEngine.playLaser(8)
+    override fun onShipExplode() {
+        soundEngine.playShipExplode()
     }
 
     /**
@@ -113,15 +137,9 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
      */
     private fun startDrawingThread() {
         stopDrawingThread()
-        drawingThread = DrawingThread(
-            applicationContext,
-            holder,
-            globalPaint,
-            drawables,
-            typefaceHelper,
-            scores,
-            this@GameActivity
-        )
+        drawingThread = Thread(Runnable {
+            gameProcessor.execute()
+        })
         drawingThread!!.start()
     }
 
@@ -137,7 +155,6 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
         } catch (e: InterruptedException) {
             Log.e(TAG, "Failed to interrupt the drawing thread")
         }
-        drawingThread?.clean()
         drawingThread = null
     }
 

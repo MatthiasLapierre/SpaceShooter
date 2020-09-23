@@ -7,7 +7,6 @@ import androidx.core.graphics.toRect
 import com.matthiaslapierre.spaceshooter.R
 import com.matthiaslapierre.spaceshooter.resources.Drawables
 import com.matthiaslapierre.spaceshooter.resources.TypefaceHelper
-import com.matthiaslapierre.spaceshooter.ui.game.DrawingThread
 import com.matthiaslapierre.spaceshooter.util.Utils
 
 class GameOverSprite(

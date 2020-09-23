@@ -131,7 +131,7 @@ object Utils {
 
         canvas.save()
         canvas.rotate(45f, width / 2f, height / 2f)
-        val shipDrawable = drawables.getPlayerShip()
+        val shipDrawable = drawables.getPlayerShip(1)
         val shipWidth = width * 0.7f
         val shipHeight = shipWidth * shipDrawable.intrinsicHeight / shipDrawable.intrinsicWidth
         val shipPositionLeft = (width - shipWidth) / 2f

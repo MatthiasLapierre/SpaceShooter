@@ -7,20 +7,17 @@ import android.graphics.PorterDuff
 import android.graphics.RectF
 import android.view.MotionEvent
 import android.view.SurfaceHolder
+import androidx.annotation.WorkerThread
 import com.matthiaslapierre.spaceshooter.Constants
-import com.matthiaslapierre.spaceshooter.Constants.ENEMY_RATE_OF_FIRE
-import com.matthiaslapierre.spaceshooter.Constants.LEVEL_DURATION_IN_SECONDS
-import com.matthiaslapierre.spaceshooter.Constants.METEORS_MULTIPLIER
-import com.matthiaslapierre.spaceshooter.Constants.PLAYER_RATE_OF_FIRE
 import com.matthiaslapierre.spaceshooter.R
 import com.matthiaslapierre.spaceshooter.resources.Drawables
 import com.matthiaslapierre.spaceshooter.resources.Scores
 import com.matthiaslapierre.spaceshooter.resources.TypefaceHelper
 import com.matthiaslapierre.spaceshooter.ui.game.sprite.*
 import com.matthiaslapierre.spaceshooter.util.Utils
-import kotlin.math.min
+import kotlin.math.max
 
-class DrawingThread(
+class GameProcessor(
     private val context: Context,
     private val holder: SurfaceHolder,
     private val globalPaint: Paint,
@@ -28,7 +25,7 @@ class DrawingThread(
     private val typefaceHelper: TypefaceHelper,
     private val scores: Scores,
     private var gameInterface: GameInterface?
-): Thread(), GameOverSprite.GameOverInterface {
+): GameOverSprite.GameOverInterface {
 
     private var currentStatus: Int = ISprite.STATUS_NOT_STARTED
     private var points: Int = 0
@@ -48,13 +45,14 @@ class DrawingThread(
     private var screenHeight: Float = 0f
     private var duration: Long = 0L
     private var lastAddingTimestamp: Long = 0
+    private var countPowerUpToGenerate = 0
+    private var isPaused: Boolean = false
 
     private var oldTouchX: Float? = null
     private var oldTouchY: Float? = null
 
-    override fun run() {
-        super.run()
-
+    @WorkerThread
+    fun execute() {
         /*
         In our DrawingThread, we loop as long as the Thread is active.
         First, we take care of the rendering of our game. To do this, we obtain a reference to the
@@ -62,7 +60,9 @@ class DrawingThread(
         We then empty the content of this Canvas before iterating on all the elements of our
         game that we want to return to the screen. These elements being our Sprites.
          */
-        while (!interrupted()) {
+        while (!Thread.interrupted()) {
+            if(isPaused) continue
+
             val startTime = System.currentTimeMillis()
             val canvas = holder.lockCanvas()
 
@@ -98,9 +98,9 @@ class DrawingThread(
              */
             val frameDuration = System.currentTimeMillis() - startTime
             val gap = Constants.MS_PER_FRAME - frameDuration
-            if(gap > 0) {
+            if (gap > 0) {
                 try {
-                    sleep(gap)
+                    Thread.sleep(gap)
                 } catch (e: Exception) {
                     break
                 }
@@ -109,7 +109,7 @@ class DrawingThread(
             // Add background.
             setBackground()
 
-            when(currentStatus) {
+            when (currentStatus) {
                 ISprite.STATUS_NOT_STARTED -> {
                     // Show the home screen
                     setSplash()
@@ -134,15 +134,19 @@ class DrawingThread(
                     shot()
                     // Update life properties.
                     checkCollisions()
+                    // Check if the player has won power up.
+                    checkPowerUpConsumption()
+                    // Add power up.
+                    setPowerUp()
                     // Show the score.
                     setScore(points)
                     // Show the current level.
                     setLevel(level)
                     // Show the life level.
                     setLifeLevel(playerSprite?.life ?: 0)
-                    if(playerSprite == null || !playerSprite!!.isAlive()) {
+                    if (playerSprite == null || !playerSprite!!.isAlive()) {
                         // Save the new best score.
-                        if(scores.isNewBestScore(context, points)) {
+                        if (scores.isNewBestScore(context, points)) {
                             scores.storeHighScore(context, points)
                         }
                         // Show the "Game Over" message.
@@ -158,6 +162,14 @@ class DrawingThread(
 
     override fun onReplayBtnPressed() {
         startGame()
+    }
+
+    fun pause() {
+        isPaused = true
+    }
+
+    fun resume() {
+        isPaused = false
     }
 
     fun onTouch(event: MotionEvent) {
@@ -209,13 +221,38 @@ class DrawingThread(
                 } else if(damagingSprite is ILiving) {
                     damagingSprite.life = 0
                     workSprites.add(ExplodeSprite(drawables, damagingSprite.getRectF()))
-                    gameInterface?.onMeteorExplode()
+                    if(damagingSprite is EnemyShipSprite || damagingSprite is PlayerSprite) {
+                        gameInterface?.onShipExplode()
+                    } else {
+                        gameInterface?.onMeteorExplode()
+                    }
                 }
                 if(livingSprite.life == 0) {
                     workSprites.add(ExplodeSprite(drawables, livingSprite.getRectF()))
-                    gameInterface?.onMeteorExplode()
+                    if(damagingSprite is EnemyShipSprite || damagingSprite is PlayerSprite) {
+                        gameInterface?.onShipExplode()
+                    } else {
+                        gameInterface?.onMeteorExplode()
+                    }
                 } else {
                     gameInterface?.onHit()
+                }
+            }
+        }
+    }
+
+    private fun checkPowerUpConsumption() {
+        playerSprite?.let { player ->
+            workSprites.filterIsInstance<PowerUpSprite>().forEach { powerUp ->
+                if (playerSprite?.getRectF()?.intersect(powerUp.getRectF()) == true
+                    && !powerUp.isConsumed) {
+                    powerUp.isConsumed = true
+                    when (powerUp.type) {
+                        PowerUpSprite.TYPE_BOLT -> player.upgrate()
+                        PowerUpSprite.TYPE_SHIELD -> player.life += (Constants.PLAYER_MAX_LIFE * 0.2f).toInt()
+                        PowerUpSprite.TYPE_STAR -> points += 10
+                        else -> points += 10
+                    }
                 }
             }
         }
@@ -306,6 +343,7 @@ class DrawingThread(
                     }
                     is EnemyShipSprite -> {
                         points += sprite.getScore()
+                        countPowerUpToGenerate++
                         countEnemyShips--
                     }
                 }
@@ -381,18 +419,18 @@ class DrawingThread(
                 typefaceHelper,
                 points,
                 scores.highScore(context),
-                this@DrawingThread
+                this@GameProcessor
             )
             workSprites.add(gameOverSprite!!)
         }
     }
 
     private fun setMeteors() {
-        while (countMeteors < (getLevel() * METEORS_MULTIPLIER)) {
+        while (countMeteors < countMinMeteors()) {
             val meteorSprite = MeteorSprite(
                 context,
                 drawables,
-                -Utils.getRandomFloat(screenHeight * 2f, screenHeight)
+                -Utils.getRandomFloat(screenHeight * 0.2f, screenHeight)
             )
             workSprites.add(meteorSprite)
             countMeteors++
@@ -408,7 +446,7 @@ class DrawingThread(
         if(lastAddingTimestamp == 0L) {
             lastAddingTimestamp = System.currentTimeMillis()
         }
-        if (System.currentTimeMillis() - timeBeforeAddingEnemyShip(getLevel()) > lastAddingTimestamp
+        if (System.currentTimeMillis() - delayBeforeAddingEnemyShip(getLevel()) > lastAddingTimestamp
             && countEnemyShips < countMaxEnemyShips()) {
             addEnemyShip()
         }
@@ -463,15 +501,51 @@ class DrawingThread(
     }
 
     private fun shot(playerSprite: PlayerSprite)  = playerSprite.apply {
-        if(lastShotTimestamp < System.currentTimeMillis() - (1000 / PLAYER_RATE_OF_FIRE)) {
-            workSprites.add(LaserSprite(context, drawables, getRectF().centerX(), playerSprite.y))
+        if(lastShotTimestamp < System.currentTimeMillis() - (1000 / Constants.PLAYER_RATE_OF_FIRE)) {
+            when (playerSprite.type) {
+                1 ->  workSprites.add(LaserSprite(context, drawables, getRectF().centerX(), playerSprite.y))
+                2 -> {
+                    workSprites.add(LaserSprite(
+                        context,
+                        drawables,
+                        getRectF().centerX() - getRectF().width() * 0.3f,
+                        playerSprite.y)
+                    )
+                    workSprites.add(LaserSprite(
+                        context,
+                        drawables,
+                        getRectF().centerX() + getRectF().width() * 0.3f,
+                        playerSprite.y)
+                    )
+                }
+                3 -> {
+                    workSprites.add(LaserSprite(
+                        context,
+                        drawables,
+                        getRectF().centerX() - getRectF().width() * 0.3f,
+                        playerSprite.y)
+                    )
+                    workSprites.add(LaserSprite(
+                        context,
+                        drawables,
+                        getRectF().centerX(),
+                        playerSprite.y)
+                    )
+                    workSprites.add(LaserSprite(
+                        context,
+                        drawables,
+                        getRectF().centerX() + getRectF().width() * 0.3f,
+                        playerSprite.y)
+                    )
+                }
+            }
             lastShotTimestamp = System.currentTimeMillis()
         }
     }
 
     private fun shot(enemyShipSprite: EnemyShipSprite) = enemyShipSprite.apply {
         if(RectF(0f, 0f, screenWidth, screenHeight).contains(enemyShipSprite.getRectF())) {
-            if (lastShotTimestamp < System.currentTimeMillis() - (1000 / ENEMY_RATE_OF_FIRE)) {
+            if (lastShotTimestamp < System.currentTimeMillis() - (1000 / Constants.ENEMY_RATE_OF_FIRE)) {
                 workSprites.add(
                     LaserSprite(
                         context,
@@ -487,14 +561,55 @@ class DrawingThread(
         }
     }
 
-    private fun addPowerUp() {
-        val type = Utils.getRandomInt(0, 3)
-        val randomX = Utils.getRandomFloat(0f, screenWidth)
-        val y = -screenHeight
-        workSprites.add(PowerUpSprite(context, drawables, type, randomX, y))
+    private fun setPowerUp() {
+        while(countPowerUpToGenerate >= 1) {
+            addPowerUp()
+            countPowerUpToGenerate--
+        }
     }
 
-    private fun getLevel(): Int = (duration / (LEVEL_DURATION_IN_SECONDS * 1000L)).toInt() + 1
+    private fun addPowerUp() {
+        playerSprite?.let { player ->
+            val powerUps = arrayOf(
+                PowerUpSprite.TYPE_SHIELD,
+                PowerUpSprite.TYPE_BOLT,
+                PowerUpSprite.TYPE_STAR,
+                PowerUpSprite.TYPE_SHIELD,
+                PowerUpSprite.TYPE_STAR,
+                PowerUpSprite.TYPE_SHIELD,
+                PowerUpSprite.TYPE_STAR,
+                PowerUpSprite.TYPE_BOLT,
+                PowerUpSprite.TYPE_SHIELD,
+                PowerUpSprite.TYPE_BOLT,
+                PowerUpSprite.TYPE_STAR,
+                PowerUpSprite.TYPE_SHIELD,
+                PowerUpSprite.TYPE_STAR,
+                PowerUpSprite.TYPE_SHIELD,
+                PowerUpSprite.TYPE_STAR,
+                PowerUpSprite.TYPE_BOLT,
+                PowerUpSprite.TYPE_SHIELD
+            )
+            val powerUpType = when (powerUps[Utils.getRandomInt(0, powerUps.size)]) {
+                PowerUpSprite.TYPE_BOLT -> if (duration >= 30000L && player.type < 3) {
+                    PowerUpSprite.TYPE_BOLT
+                } else {
+                    PowerUpSprite.TYPE_STAR
+                }
+                PowerUpSprite.TYPE_SHIELD -> if (player.life < Constants.PLAYER_MAX_LIFE) {
+                    PowerUpSprite.TYPE_SHIELD
+                } else {
+                    PowerUpSprite.TYPE_STAR
+                }
+                else -> PowerUpSprite.TYPE_STAR
+            }
+            val powerUpWidth = Utils.getDimenInPx(context, R.dimen.powerUpSize)
+            val randomX = Utils.getRandomFloat(0f, screenWidth - powerUpWidth)
+            val y = -(screenHeight * 0.2f)
+            workSprites.add(PowerUpSprite(context, drawables, powerUpType, randomX, y))
+        }
+    }
+
+    private fun getLevel(): Int = (duration / (Constants.LEVEL_DURATION_IN_SECONDS * 1000L)).toInt() + 1
 
     private fun countMaxEnemyShips(): Int {
         val enemyShipWidth = Utils.getDimenInPx(context, R.dimen.enemyShipWidth)
@@ -503,11 +618,18 @@ class DrawingThread(
 
     private fun countMinStars(): Int = (screenHeight.toInt() * 0.05).toInt()
 
-    private fun timeBeforeAddingEnemyShip(level: Int): Long =
+    private fun countMinMeteors(): Int {
+        val minMeteors = (screenWidth * 0.001f).toInt()
+        val maxMeteors = (screenWidth * 0.004f).toInt()
+        val delta = (screenWidth * 0.001f * getLevel()).toInt()
+        return (minMeteors + delta).coerceAtLeast(maxMeteors)
+    }
+
+    private fun delayBeforeAddingEnemyShip(level: Int): Long =
         if(countEnemyShips == 0) {
             5
         } else {
-            (LEVEL_DURATION_IN_SECONDS - ((level - 1) * 2)) * 1000L
+            (Constants.LEVEL_DURATION_IN_SECONDS - ((level - 1) * 2)) * 1000L
         }
 
     interface GameInterface {
@@ -515,7 +637,7 @@ class DrawingThread(
         fun onGameOver()
         fun onHit()
         fun onMeteorExplode()
-        fun onShot()
+        fun onShipExplode()
     }
 
 }

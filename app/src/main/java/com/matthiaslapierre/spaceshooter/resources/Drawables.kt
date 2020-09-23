@@ -119,7 +119,11 @@ class Drawables(
     /**
      * Gets the player ship.
      */
-    fun getPlayerShip(): Drawable = get(R.drawable.player_ship1_blue)
+    fun getPlayerShip(type: Int): Drawable = when (type) {
+        1 -> get(R.drawable.player_ship1_blue)
+        2 -> get(R.drawable.player_ship2_blue)
+        else -> get(R.drawable.player_ship3_blue)
+    }
 
     /**
      * Gets the enemy ship.
