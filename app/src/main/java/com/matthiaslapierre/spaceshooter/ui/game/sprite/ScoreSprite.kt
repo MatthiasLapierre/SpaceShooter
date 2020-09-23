@@ -10,13 +10,20 @@ import com.matthiaslapierre.spaceshooter.resources.Drawables
 import com.matthiaslapierre.spaceshooter.resources.TypefaceHelper
 import com.matthiaslapierre.spaceshooter.util.Utils
 
+/**
+ * Draws the score.
+ */
 class ScoreSprite(
     private val context: Context,
     private val drawables: Drawables,
     private val typefaceHelper: TypefaceHelper
 ) : ISprite {
 
+    /**
+     * Points.
+     */
     var currentScore: Int = 0
+
     private var width: Float = UNDEFINED
     private var height: Float = UNDEFINED
     private val margin: Float = Utils.getDimenInPx(context, R.dimen.scoreIndicatorMargin)

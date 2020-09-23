@@ -6,11 +6,15 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import androidx.core.graphics.toRect
+import com.matthiaslapierre.spaceshooter.Constants.METEOR_POINTS_MULTIPLIER
 import com.matthiaslapierre.spaceshooter.Constants.UNDEFINED
 import com.matthiaslapierre.spaceshooter.R
 import com.matthiaslapierre.spaceshooter.resources.Drawables
 import com.matthiaslapierre.spaceshooter.util.Utils
 
+/**
+ * Draws a meteor.
+ */
 class MeteorSprite(
     context: Context,
     drawables: Drawables,
@@ -27,23 +31,33 @@ class MeteorSprite(
         const val TYPE_GREY = 2
     }
 
+    /**
+     * Random size.
+     */
     private val size: Int = Utils.getRandomInt(SIZE_TINY, SIZE_BIG + 1)
+
+    /**
+     * Random type.
+     */
     private val type: Int = Utils.getRandomInt(TYPE_BROWN, TYPE_GREY + 1)
-    override var life: Int = size * type
-        set(value) {
-            field = if(value > 0) {
-                value
-            } else {
-                0
-            }
-        }
-    override val damage: Int = size * type
+    /**
+     * Random speed.
+     */
     private val speed: Float = Utils.getRandomFloat(
         Utils.getDimenInPx(context, R.dimen.meteorSpeedMin),
         Utils.getDimenInPx(context, R.dimen.meteorSpeedMax)
     )
-    private val points: Int = size * type * 2
+    /**
+     * Points to win after destroying a meteor.
+     */
+    private val points: Int = size * type * METEOR_POINTS_MULTIPLIER
+    /**
+     * Drawable resource.
+     */
     private val drawable: Drawable = drawables.getMeteor(type, size)
+    /**
+     * Sprite width.
+     */
     private val width: Float by lazy {
         when (size) {
             SIZE_TINY -> Utils.getDimenInPx(context, R.dimen.meteorTinyWidth)
@@ -53,14 +67,38 @@ class MeteorSprite(
             else -> Utils.getDimenInPx(context, R.dimen.meteorTinyWidth)
         }
     }
+    /**
+     * Sprite height.
+     */
     private val height: Float by lazy {
         width * drawable.intrinsicHeight / drawable.intrinsicWidth
     }
+    /**
+     * x-coordinate.
+     */
     private var x: Float = UNDEFINED
     private var isAlive: Boolean = true
 
+    /**
+     * Health level.
+     */
+    override var life: Int = size * type
+        set(value) {
+            field = if(value > 0) {
+                value
+            } else {
+                0
+            }
+        }
+
+    /**
+     * Damages caused when the meteor has hiten the player.
+     */
+    override val damage: Int = size * type
+
     override fun onDraw(canvas: Canvas, globalPaint: Paint, status: Int) {
         if(x == UNDEFINED) {
+            // Initialize the x-coordinate.
             val screenWidth = canvas.width
             x = Utils.getRandomFloat(0f, screenWidth - width)
         }

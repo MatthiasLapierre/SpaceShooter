@@ -9,6 +9,9 @@ import com.matthiaslapierre.spaceshooter.resources.Drawables
 import com.matthiaslapierre.spaceshooter.resources.TypefaceHelper
 import com.matthiaslapierre.spaceshooter.util.Utils
 
+/**
+ * Game Over UI.
+ */
 class GameOverSprite(
     private val context: Context,
     private val drawables: Drawables,
@@ -42,9 +45,12 @@ class GameOverSprite(
         screenWidth = canvas.width.toFloat()
         screenHeight = canvas.height.toFloat()
 
+        // Get string resources.
         val strTitle = context.resources.getString(R.string.game_over)
         val strLastScore = context.resources.getString(R.string.last_score_params, lastScore)
         val strBestScore = context.resources.getString(R.string.best_score_params, bestScore)
+
+        // Get the replay button.
         val replayBmp = Utils.generateButton(
             context,
             drawables,
@@ -52,6 +58,7 @@ class GameOverSprite(
             context.resources.getString(R.string.replay)
         )
 
+        // Get dimensions.
         val titleBounds = Rect()
         val lastScoreBounds = Rect()
         val bestScoreBounds = Rect()
@@ -61,6 +68,7 @@ class GameOverSprite(
         val scoreMarginTop = Utils.getDimenInPx(context, R.dimen.finalScoreMarginTop)
         val replayBtnMarginTop = Utils.getDimenInPx(context, R.dimen.replayBtnMarginTop)
 
+        // Compute the UI height.
         val height = titleBounds.height() +
                 scoreMarginTop +
                 lastScoreBounds.height() +
@@ -68,6 +76,7 @@ class GameOverSprite(
                 bestScoreBounds.height() +
                 replayBtnMarginTop
 
+        // Draw the "Game Over" title.
         var y = (screenHeight / 2f) - (height / 2f)
         canvas.drawText(
             strTitle,
@@ -77,6 +86,7 @@ class GameOverSprite(
         )
 
 
+        // Draw the last score.
         y += lastScoreBounds.height() + scoreMarginTop
         canvas.drawText(
             strLastScore,
@@ -85,6 +95,7 @@ class GameOverSprite(
             scoreTextPaint
         )
 
+        // Draw the best score.
         y += lastScoreBounds.height() * 2f
         canvas.drawText(
             strBestScore,
@@ -93,6 +104,7 @@ class GameOverSprite(
             scoreTextPaint
         )
 
+        // Draw the replay button.
         y += bestScoreBounds.height() + replayBtnMarginTop
         val replayBtnX = screenWidth / 2f - replayBmp.width / 2f
         replayRect = RectF(

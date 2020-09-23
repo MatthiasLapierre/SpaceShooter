@@ -11,19 +11,37 @@ import com.matthiaslapierre.spaceshooter.R
 import com.matthiaslapierre.spaceshooter.resources.Drawables
 import com.matthiaslapierre.spaceshooter.util.Utils
 
+/**
+ * Draws a star in the intergalactic space.
+ */
 class StarSprite(
-    private val context: Context,
-    private val drawables: Drawables,
+    context: Context,
+    drawables: Drawables,
     var y: Float
 ): ISprite {
 
+    /**
+     * Random drawable resource.
+     */
     private val drawable: Drawable = drawables.getRandomStar()
+    /**
+     * Sprite width.
+     */
     private val width: Float = Utils.getDimenInPx(context, R.dimen.starSize)
+    /**
+     * Sprite height.
+     */
     private val height: Float = Utils.getDimenInPx(context, R.dimen.starSize)
+    /**
+     * Random speed.
+     */
     private val speed: Float = Utils.getRandomFloat(
         context.resources.getDimension(R.dimen.starSpeedMin),
         context.resources.getDimension(R.dimen.starSpeedMax)
     )
+    /**
+     * X-coordinate.
+     */
     private var x: Float = UNDEFINED
     private var isAlive: Boolean = true
 

@@ -1,10 +1,15 @@
 package com.matthiaslapierre.spaceshooter.ui.game.sprite
 
 import android.content.Context
-import android.graphics.*
-import android.view.MotionEvent
-import com.matthiaslapierre.spaceshooter.R
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.RectF
+import com.matthiaslapierre.spaceshooter.util.Utils
 
+/**
+ * Draws the game background.
+ */
 class BackgroundSprite(
     private val context: Context
 ): ISprite {
@@ -17,7 +22,11 @@ class BackgroundSprite(
         screenWidth = canvas.width.toFloat()
         screenHeight = canvas.height.toFloat()
         if(background == null) {
-            background = generateBackground(screenWidth.toInt(), screenHeight.toInt())
+            background = Utils.generateGameBackground(
+                context,
+                screenWidth.toInt(),
+                screenHeight.toInt()
+            )
         }
         canvas.drawBitmap(background!!, 0f, 0f, null)
     }
@@ -36,30 +45,9 @@ class BackgroundSprite(
     )
 
     override fun onCleared() {
+        // Clear the reference to the pixel data.
         background?.recycle()
         background = null
-    }
-
-    private fun generateBackground(screenWidth: Int, screenHeight: Int): Bitmap {
-        val bgBmp = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.RGB_565)
-        val canvas = Canvas(bgBmp)
-        val tile = BitmapFactory.decodeResource(context.resources, R.drawable.bg)
-        var left = 0f
-        var top = 0f
-        while (left < screenWidth) {
-            while (top < screenHeight) {
-                canvas.drawBitmap(
-                    tile,
-                    left,
-                    top,
-                    null)
-                top += tile.height
-            }
-            top = 0f
-            left += tile.width
-        }
-        tile.recycle()
-        return bgBmp
     }
 
 }

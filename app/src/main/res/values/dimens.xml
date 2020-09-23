@@ -9,7 +9,6 @@
     <dimen name="enemyShipSpeed">4dp</dimen>
     <dimen name="playerShipInitialBottom">100dp</dimen>
     <dimen name="laserStdWidth">9dp</dimen>
-    <dimen name="laserHeavyWidth">13dp</dimen>
     <dimen name="playerLaserSpeed">14dp</dimen>
     <dimen name="enemyLaserSpeed">7dp</dimen>
     <dimen name="starSize">5dp</dimen>

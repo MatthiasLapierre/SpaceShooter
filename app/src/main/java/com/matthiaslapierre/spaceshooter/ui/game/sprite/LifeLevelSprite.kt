@@ -11,11 +11,15 @@ import com.matthiaslapierre.spaceshooter.R
 import com.matthiaslapierre.spaceshooter.resources.Drawables
 import com.matthiaslapierre.spaceshooter.util.Utils
 
+/**
+ * Draws the health bar.
+ */
 class LifeLevelSprite(
     private val context: Context
 ): ISprite {
 
     var currentLife: Int = 0
+
     private var width: Float = Utils.getDimenInPx(context, R.dimen.lifeProgressWidth)
     private var height: Float = Utils.getDimenInPx(context, R.dimen.lifeProgressHeight)
     private var x: Float = Constants.UNDEFINED

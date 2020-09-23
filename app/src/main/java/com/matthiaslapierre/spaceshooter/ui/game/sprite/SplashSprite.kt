@@ -6,6 +6,9 @@ import com.matthiaslapierre.spaceshooter.R
 import com.matthiaslapierre.spaceshooter.resources.TypefaceHelper
 import com.matthiaslapierre.spaceshooter.util.Utils
 
+/**
+ * Draws the Spash UI.
+ */
 class SplashSprite(
     private val context: Context,
     private val typefaceHelper: TypefaceHelper
@@ -54,6 +57,9 @@ class SplashSprite(
 
     }
 
+    /**
+     * Draws the title of the game.
+     */
     private fun drawTitle(canvas: Canvas) {
         val strTitle = context.resources.getString(R.string.app_name)
         val bounds = Rect()
@@ -68,6 +74,9 @@ class SplashSprite(
         )
     }
 
+    /**
+     * Draws the "Press to start" label.
+     */
     private fun drawStartLabel(canvas: Canvas) {
         val strTitle = context.resources.getString(R.string.press_to_start)
         val bounds = Rect()

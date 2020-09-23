@@ -1,7 +1,6 @@
 package com.matthiaslapierre.spaceshooter.util
 
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.*
 import androidx.annotation.DimenRes
 import androidx.core.content.ContextCompat
@@ -13,11 +12,6 @@ import com.matthiaslapierre.spaceshooter.resources.TypefaceHelper
 import kotlin.random.Random
 
 object Utils {
-
-    /**
-     * Multiplies value by the density factor.
-     */
-    fun applyScaleFactor(px: Int) = Resources.getSystem().displayMetrics.density * px
 
     /**
      * Retrieves a dimensional for a particular resource ID for use as a size in raw pixels.
@@ -83,7 +77,7 @@ object Utils {
     }
 
     /**
-     * Generates a bitmap showing the number of life remaining.
+     * Draws a health bar.
      */
     fun generateLifeLevel(
         context: Context,
@@ -132,7 +126,7 @@ object Utils {
     }
 
     /**
-     * Generates a button.
+     * Draws a button.
      */
     fun generateButton(
         context: Context,
@@ -161,6 +155,35 @@ object Utils {
             buttonTitleTextPaint
         )
         return bitmap
+    }
+
+    /**
+     * Generates the game background.
+     */
+    fun generateGameBackground(
+        context: Context,
+        screenWidth: Int,
+        screenHeight: Int
+    ): Bitmap {
+        val bgBmp = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.RGB_565)
+        val canvas = Canvas(bgBmp)
+        val tile = BitmapFactory.decodeResource(context.resources, R.drawable.bg)
+        var left = 0f
+        var top = 0f
+        while (left < screenWidth) {
+            while (top < screenHeight) {
+                canvas.drawBitmap(
+                    tile,
+                    left,
+                    top,
+                    null)
+                top += tile.height
+            }
+            top = 0f
+            left += tile.width
+        }
+        tile.recycle()
+        return bgBmp
     }
 
 }

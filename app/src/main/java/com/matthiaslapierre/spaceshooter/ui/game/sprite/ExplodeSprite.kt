@@ -7,11 +7,17 @@ import androidx.core.graphics.toRect
 import com.matthiaslapierre.spaceshooter.Constants.EXPLODE_MAX_FRAMES
 import com.matthiaslapierre.spaceshooter.resources.Drawables
 
+/**
+ * Explode animation.
+ */
 class ExplodeSprite(
     private val drawables: Drawables,
     private val rectF: RectF
 ): ISprite {
 
+    /**
+     * Current frame drawn.
+     */
     private var currentFrame = 1
 
     override fun onDraw(canvas: Canvas, globalPaint: Paint, status: Int) {
@@ -20,6 +26,7 @@ class ExplodeSprite(
             drawable.bounds = getRectF().toRect()
             drawable.draw(canvas)
         }
+        // Draw the next frame at the next occurrence.
         currentFrame++
     }
 

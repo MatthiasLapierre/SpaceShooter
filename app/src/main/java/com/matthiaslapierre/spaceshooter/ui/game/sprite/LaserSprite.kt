@@ -6,30 +6,29 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import androidx.core.graphics.toRect
+import com.matthiaslapierre.spaceshooter.Constants
+import com.matthiaslapierre.spaceshooter.Constants.LASER_DAMAGE
 import com.matthiaslapierre.spaceshooter.R
 import com.matthiaslapierre.spaceshooter.resources.Drawables
 import com.matthiaslapierre.spaceshooter.util.Utils
 
+/**
+ * Draw a laser shot.
+ */
 class LaserSprite(
     context: Context,
     drawables: Drawables,
     private var x: Float,
     private var y: Float,
-    private val type: Int = TYPE_STANDARD,
     val adverse: Boolean = false
 ): ISprite, IDamaging, IConsumable {
 
-    companion object {
-        const val TYPE_STANDARD = 0
-        const val TYPE_HEAVY = 1
-    }
-    private val drawable: Drawable = drawables.getLaser(adverse, type == TYPE_HEAVY)
+    override val damage: Int = LASER_DAMAGE
+    override var isConsumed: Boolean = false
+
+    private val drawable: Drawable = drawables.getLaser(adverse)
     private val width: Float by lazy {
-        if(type == TYPE_HEAVY) {
-            Utils.getDimenInPx(context, R.dimen.laserHeavyWidth)
-        } else {
-            Utils.getDimenInPx(context, R.dimen.laserStdWidth)
-        }
+        Utils.getDimenInPx(context, R.dimen.laserStdWidth)
     }
     private val height: Float by lazy {
         width * drawable.intrinsicHeight / drawable.intrinsicWidth
@@ -42,19 +41,13 @@ class LaserSprite(
         }
     }
     private var isAlive = true
-    override val damage: Int
-        get() = if(type == TYPE_HEAVY) {
-            2
-        } else {
-            1
-        }
-    override var isConsumed: Boolean = false
 
     override fun onDraw(canvas: Canvas, globalPaint: Paint, status: Int) {
         val screenWidth = canvas.width
         val screenHeight = canvas.height
         isAlive = status == ISprite.STATUS_PLAY && y >= 0 && y <= screenHeight && !isConsumed
 
+        // Move the laser shot.
         if(status == ISprite.STATUS_PLAY) {
             if(adverse) {
                 y += speed
@@ -64,6 +57,7 @@ class LaserSprite(
         }
 
         if(adverse) {
+            // If it's an enemy shot, we 180-rotate the canvas.
             canvas.save()
             canvas.rotate(180f, canvas.width / 2f, canvas.height / 2f)
             drawable.bounds = RectF(

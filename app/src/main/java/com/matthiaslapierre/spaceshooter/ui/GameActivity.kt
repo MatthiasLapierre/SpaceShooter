@@ -13,7 +13,6 @@ import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.View
 import com.matthiaslapierre.spaceshooter.App
-import com.matthiaslapierre.spaceshooter.Constants
 import com.matthiaslapierre.spaceshooter.Constants.VIBRATION_DAMAGE_DURATION_MS
 import com.matthiaslapierre.spaceshooter.R
 import com.matthiaslapierre.spaceshooter.resources.Drawables
@@ -23,6 +22,9 @@ import com.matthiaslapierre.spaceshooter.resources.TypefaceHelper
 import com.matthiaslapierre.spaceshooter.ui.game.GameProcessor
 import kotlinx.android.synthetic.main.activity_game.*
 
+/**
+ * Space Shooter Game.
+ */
 class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchListener,
     GameProcessor.GameInterface {
 
@@ -36,7 +38,6 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
     private lateinit var soundEngine: SoundEngine
     private lateinit var scores: Scores
     private lateinit var gameProcessor: GameProcessor
-
     private lateinit var holder: SurfaceHolder
     private val globalPaint: Paint by lazy {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -58,8 +59,10 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
         soundEngine = appContainer.soundEngine
         scores = appContainer.scores
 
+        // Start the menu music.
         soundEngine.playMenuMusic()
 
+        // Initialize the SurfaceView.
         surfaceView.keepScreenOn = true
         holder = surfaceView.holder
         surfaceView.setZOrderOnTop(true)
@@ -67,6 +70,7 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
         holder.addCallback(this)
         holder.setFormat(PixelFormat.TRANSLUCENT)
 
+        // Initialize the GameProcessor.
         gameProcessor = GameProcessor(
             applicationContext,
             holder,
@@ -80,28 +84,34 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
 
     override fun onResume() {
         super.onResume()
+        // Resume the game.
         gameProcessor.resume()
+        // Start the music.
         soundEngine.resume()
     }
 
     override fun onPause() {
+        // Pause the music.
         soundEngine.pause()
+        // Pause the game.
         gameProcessor.pause()
         super.onPause()
     }
 
     override fun onDestroy() {
+        // Unload resources.
         soundEngine.release()
-        gameProcessor.clean()
+        gameProcessor.release()
         super.onDestroy()
     }
 
     override fun onBackPressed() {
-
+        // Do nothing
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
         surfaceCreated = true
+        // After the surface is created, we start the game loop.
         startDrawingThread()
     }
 
@@ -110,11 +120,13 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
+        // Stop the game loop after destroying the surface.
         surfaceCreated = false
         stopDrawingThread()
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        // Send touch event to the game processor.
         event?.let {
             gameProcessor.onTouch(event)
         }
@@ -122,17 +134,20 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
     }
 
     override fun onGameStart() {
+        // On the game start, a sound effect is played. The main music start.
         soundEngine.playBtnPress()
         soundEngine.playPlayMusic()
     }
 
     override fun onGameOver() {
+        // On Game Over, play a special music.
         soundEngine.playCrash()
         soundEngine.playGameOver()
         soundEngine.playGameOverMusic()
     }
 
     override fun onHit(playerShip: Boolean) {
+        // Play hit sound.
         soundEngine.playShotHit()
         if(playerShip) {
             // Vibrate the device for a short after hitting a meteor or a laser shot
@@ -150,14 +165,17 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
     }
 
     override fun onPowerUpWin() {
+        // The user has won an extra => Play a special sound.
         soundEngine.playGetPowerUp()
     }
 
     override fun onMeteorExplode() {
+        // A meteor has exploded. Play the explode sound effect.
         soundEngine.playMeteorExplode()
     }
 
     override fun onShipExplode() {
+        // A space ship has exploded. Play the explode sound effect.
         soundEngine.playShipExplode()
     }
 

@@ -18,6 +18,9 @@ class TypefaceHelper(
 
     private val cache: Hashtable<String, Typeface> = Hashtable()
 
+    /**
+     * Loads typefaces.
+     */
     fun load() {
         Thread(Runnable {
             get(FONT_FUTURE)
@@ -25,7 +28,14 @@ class TypefaceHelper(
         }).start()
     }
 
+    /**
+     * Gets the main typeface.
+     */
     fun getFutureTypeface(): Typeface = get(FONT_FUTURE)!!
+
+    /**
+     * Gets the thin variant.
+     */
     fun getFutureThinTypeface(): Typeface = get(FONT_FUTURE_THIN)!!
 
     private fun get(name: String): Typeface? {

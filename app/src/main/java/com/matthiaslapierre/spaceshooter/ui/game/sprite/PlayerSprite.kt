@@ -16,18 +16,9 @@ class PlayerSprite(
     private val drawables: Drawables
 ): ISprite, ILiving {
 
-    var x: Float = UNDEFINED
-    var y: Float = UNDEFINED
-    var lastShotTimestamp: Long = 0L
-    var type: Int = 1
-        set(value) {
-            field = if(value > 3) {
-                3
-            } else {
-                value
-            }
-            drawable = drawables.getPlayerShip(type)
-        }
+    /**
+     * Health level.
+     */
     override var life: Int = PLAYER_MAX_LIFE
         set(value) {
             field = when {
@@ -42,9 +33,48 @@ class PlayerSprite(
                 }
             }
         }
+
+    /**
+     * X-coordinate.
+     */
+    var x: Float = UNDEFINED
+    /**
+     * Y-coordinate.
+     */
+    var y: Float = UNDEFINED
+    /**
+     * Timestamp of the last shot.
+     */
+    var lastShotTimestamp: Long = 0L
+
+    /**
+     * Ship type.
+     */
+    var type: Int = 1
+        set(value) {
+            field = if(value > 3) {
+                3
+            } else {
+                value
+            }
+            drawable = drawables.getPlayerShip(type)
+        }
+
+    /**
+     * Drawable resource.
+     */
     private var drawable = drawables.getPlayerShip(type)
+    /**
+     * Sprite width.
+     */
     private var width: Float = Utils.getDimenInPx(context, R.dimen.playerShipWidth)
+    /**
+     * Sprite height.
+     */
     private var height: Float = width * drawable.intrinsicHeight / drawable.intrinsicWidth
+    /**
+     * Bottom outset.
+     */
     private val initialBottom = Utils.getDimenInPx(context, R.dimen.playerShipInitialBottom)
 
     override fun onDraw(canvas: Canvas, globalPaint: Paint, status: Int) {
@@ -90,6 +120,9 @@ class PlayerSprite(
 
     }
 
+    /**
+     * Upgrate the space ship.
+     */
     fun upgrate() {
         type++
     }

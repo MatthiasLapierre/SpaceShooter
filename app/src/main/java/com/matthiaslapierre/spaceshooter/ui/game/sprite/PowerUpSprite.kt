@@ -10,6 +10,9 @@ import com.matthiaslapierre.spaceshooter.R
 import com.matthiaslapierre.spaceshooter.resources.Drawables
 import com.matthiaslapierre.spaceshooter.util.Utils
 
+/**
+ * Bonus to win.
+ */
 class PowerUpSprite(
     context: Context,
     drawables: Drawables,
@@ -19,10 +22,27 @@ class PowerUpSprite(
 ) : ISprite, IConsumable {
 
     companion object {
+        /**
+         * Space ship upgrate.
+         */
         const val TYPE_BOLT = 0
+
+        /**
+         * Shield repair.
+         */
         const val TYPE_SHIELD = 1
+
+        /**
+         * +n points
+         */
         const val TYPE_STAR = 2
     }
+
+    override var isConsumed: Boolean = false
+
+    /**
+     * Drawable resource.
+     */
     private val drawable: Drawable by lazy {
         when(type) {
             TYPE_BOLT -> drawables.getPowerUpBolt()
@@ -31,12 +51,20 @@ class PowerUpSprite(
             else -> drawables.getPowerUpStar()
         }
     }
+
+    /**
+     * Sprite width.
+     */
     private val width = Utils.getDimenInPx(context, R.dimen.powerUpSize)
+    /**
+     * Sprite height.
+     */
     private val height = Utils.getDimenInPx(context, R.dimen.powerUpSize)
+    /**
+     * Sprite speed.
+     */
     private val speed = Utils.getDimenInPx(context, R.dimen.powerUpSpeed)
     private var isAlive = true
-
-    override var isConsumed: Boolean = false
 
     override fun onDraw(canvas: Canvas, globalPaint: Paint, status: Int) {
         val screenHeight = canvas.height
@@ -52,6 +80,7 @@ class PowerUpSprite(
     override fun isAlive(): Boolean = isAlive
 
     override fun isHit(sprite: ISprite): Boolean = isAlive
+            && y >= 0
             && sprite is PlayerSprite
             && sprite.getRectF().intersect(getRectF())
 

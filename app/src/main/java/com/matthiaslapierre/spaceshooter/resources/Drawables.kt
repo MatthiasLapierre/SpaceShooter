@@ -99,21 +99,12 @@ class Drawables(
     /**
      * Gets a laser.
      * @param adverse shot by an enemy ship
-     * @param heavy large caliber
      */
-    fun getLaser(adverse: Boolean, heavy: Boolean): Drawable =
+    fun getLaser(adverse: Boolean): Drawable =
         if(adverse) {
-            if(heavy) {
-                get(R.drawable.laser_red2)
-            } else {
-                get(R.drawable.laser_red1)
-            }
+            get(R.drawable.laser_red1)
         } else {
-            if(heavy) {
-                get(R.drawable.laser_blue2)
-            } else {
-                get(R.drawable.laser_blue1)
-            }
+            get(R.drawable.laser_blue1)
         }
 
     /**
@@ -137,17 +128,17 @@ class Drawables(
     fun getExplosionFrame(frame: Int): Drawable = get("explode_$frame".hashCode())
 
     /**
-     * Gets the bolt power up.
+     * Power-up. Space ship upgrate.
      */
     fun getPowerUpBolt() = get(R.drawable.powerup_bolt)
 
     /**
-     * Gets the shield power up.
+     * Shield repair.
      */
     fun getPowerUpShield() = get(R.drawable.powerup_shield)
 
     /**
-     *
+     * +n points
      */
     fun getPowerUpStar() = get(R.drawable.powerup_star)
 

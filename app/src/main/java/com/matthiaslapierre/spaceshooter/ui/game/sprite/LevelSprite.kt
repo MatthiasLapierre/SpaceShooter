@@ -10,6 +10,9 @@ import com.matthiaslapierre.spaceshooter.resources.TypefaceHelper
 import com.matthiaslapierre.spaceshooter.R
 import com.matthiaslapierre.spaceshooter.util.Utils
 
+/**
+ * Draws the current level.
+ */
 class LevelSprite(
     private val context: Context,
     private val drawables: Drawables,
@@ -17,6 +20,7 @@ class LevelSprite(
 ): ISprite {
 
     var currentLevel: Int = 0
+
     private var width: Float = Constants.UNDEFINED
     private var height: Float = Constants.UNDEFINED
     private val marginLeft: Float = Utils.getDimenInPx(context, R.dimen.levelIndicatorMarginLeft)

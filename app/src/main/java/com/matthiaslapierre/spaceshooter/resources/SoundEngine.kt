@@ -31,9 +31,20 @@ class SoundEngine(
         private const val MUSIC_GAME_OVER = "musics/game_over.ogg"
     }
 
+    /**
+     * To play short sounds.
+     */
     private val soundPool: SoundPool
-    private val sounds: Array<Int?> = arrayOfNulls(7)
+
+    /**
+     * To play music.
+     */
     private var player: MediaPlayer? = null
+
+    /**
+     * Cache.
+     */
+    private val sounds: Array<Int?> = arrayOfNulls(7)
 
     init {
         soundPool = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -94,20 +105,59 @@ class SoundEngine(
         player?.pause()
     }
 
+    /**
+     * Plays a button press sound effect.
+     */
     fun playBtnPress() = playSound(SOUND_BTN_PRESS)
+
+    /**
+     * Plays the crash sound effect.
+     */
     fun playCrash() = playSound(SOUND_CRASH)
+
+    /**
+     * Plays the meteor explode sound effect.
+     */
     fun playMeteorExplode() = playSound(SOUND_METEOR_EXPLODE)
+
+    /**
+     * Plays the space ship explode sound effect.
+     */
     fun playShipExplode() = playSound(SOUND_SHIP_EXPLODE)
+
+    /**
+     * Plays a sound after getting a power-up.
+     */
     fun playGetPowerUp() = playSound(SOUND_GET_POWER_UP)
+
+    /**
+     * Plays "Game Over" sound effect.
+     */
     fun playGameOver() = playSound(SOUND_GAME_OVER)
+
+    /**
+     * Plays a sound after the laser shot hits its target.
+     */
     fun playShotHit() = playSound(SOUND_SHOT_HIT)
 
+    /**
+     * Plays the menu music.
+     */
     fun playMenuMusic() = playMusic(MUSIC_MENU)
 
+    /**
+     * Plays the main music.
+     */
     fun playPlayMusic() = playMusic(MUSIC_PLAY)
 
+    /**
+     * Plays the Game Over music.
+     */
     fun playGameOverMusic() = playMusic(MUSIC_GAME_OVER)
 
+    /**
+     * Stops the music.
+     */
     fun stopMusic() {
         if(player != null) {
             player?.release()
@@ -115,6 +165,9 @@ class SoundEngine(
         }
     }
 
+    /**
+     * Plays a sound if it is in caches
+     */
     private fun playSound(index: Int, volume: Float = 0.5f, infiniteLoop: Boolean = false) {
         sounds[index]?.let { soundId ->
             val loop = if(infiniteLoop) -1 else 0
@@ -122,6 +175,9 @@ class SoundEngine(
         }
     }
 
+    /**
+     * Plays a music.
+     */
     private fun playMusic(filename: String) {
         stopMusic()
         try {
