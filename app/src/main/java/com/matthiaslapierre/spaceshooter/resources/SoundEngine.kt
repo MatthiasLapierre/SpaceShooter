@@ -71,11 +71,11 @@ class SoundEngine(
      */
     fun load() {
         Thread(Runnable {
-            sounds[SOUND_BTN_PRESS] = soundPool.load(assets.openFd("sounds/sfx_btn_press1.ogg"), 1)
+            sounds[SOUND_BTN_PRESS] = soundPool.load(assets.openFd("sounds/sfx_btn_press.ogg"), 1)
             sounds[SOUND_CRASH] = soundPool.load(assets.openFd("sounds/sfx_crash.ogg"), 1)
             sounds[SOUND_METEOR_EXPLODE] = soundPool.load(assets.openFd("sounds/sfx_explode_meteor.ogg"), 1)
             sounds[SOUND_SHIP_EXPLODE] = soundPool.load(assets.openFd("sounds/sfx_explode_ship.ogg"), 1)
-            sounds[SOUND_GET_POWER_UP] = soundPool.load(assets.openFd("sounds/sfx_handle_coins1.ogg"), 1)
+            sounds[SOUND_GET_POWER_UP] = soundPool.load(assets.openFd("sounds/sfx_get_power_up.ogg"), 1)
             sounds[SOUND_GAME_OVER] = soundPool.load(assets.openFd("sounds/sfx_lose.ogg"), 1)
             sounds[SOUND_SHOT_HIT] = soundPool.load(assets.openFd("sounds/sfx_shot_hit.ogg"), 1)
         }).start()
