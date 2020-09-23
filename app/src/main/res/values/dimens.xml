@@ -26,7 +26,8 @@
     <dimen name="lifeIconWidth">20dp</dimen>
     <dimen name="lifeIconMargin">3dp</dimen>
     <dimen name="lifeMargin">10dp</dimen>
-    <dimen name="lifeProgressSize">80dp</dimen>
+    <dimen name="lifeProgressWidth">5dp</dimen>
+    <dimen name="lifeProgressHeight">200dp</dimen>
     <dimen name="lifeIndicatorProgressLineWidth">3dp</dimen>
     <dimen name="finalScoreTextSize">20sp</dimen>
     <dimen name="btnTitleTextSize">20sp</dimen>

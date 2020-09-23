@@ -87,6 +87,10 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
         super.onDestroy()
     }
 
+    override fun onBackPressed() {
+
+    }
+
     override fun surfaceCreated(holder: SurfaceHolder) {
         surfaceCreated = true
         startDrawingThread()

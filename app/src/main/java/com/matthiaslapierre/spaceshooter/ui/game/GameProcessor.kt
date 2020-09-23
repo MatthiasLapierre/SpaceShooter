@@ -79,13 +79,6 @@ class GameProcessor(
                 instance of Canvas passed as a parameter.
                  */
                 updateCanvas(canvas)
-
-                // Show the score.
-                scoreSprite?.onDraw(canvas, globalPaint, currentStatus)
-                // Show the current level.
-                levelSprite?.onDraw(canvas, globalPaint, currentStatus)
-                // Show the life level.
-                lifeLevelSprite?.onDraw(canvas, globalPaint, currentStatus)
             } finally {
                 holder.unlockCanvasAndPost(canvas)
             }
@@ -107,7 +100,6 @@ class GameProcessor(
 
             // Add background.
             setBackground()
-
             when (currentStatus) {
                 ISprite.STATUS_NOT_STARTED -> {
                     // Show the home screen
@@ -349,6 +341,13 @@ class GameProcessor(
                 }
             }
         }
+
+        // Show the score.
+        scoreSprite?.onDraw(canvas, globalPaint, currentStatus)
+        // Show the current level.
+        levelSprite?.onDraw(canvas, globalPaint, currentStatus)
+        // Show the life level.
+        lifeLevelSprite?.onDraw(canvas, globalPaint, currentStatus)
     }
 
     /**
@@ -388,7 +387,7 @@ class GameProcessor(
 
     private fun setLifeLevel(life: Int) {
         if(lifeLevelSprite == null || !lifeLevelSprite!!.isAlive()) {
-            lifeLevelSprite = LifeLevelSprite(context, drawables)
+            lifeLevelSprite = LifeLevelSprite(context)
         }
         lifeLevelSprite!!.currentLife = life
     }

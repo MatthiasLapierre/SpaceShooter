@@ -87,63 +87,46 @@ object Utils {
      */
     fun generateLifeLevel(
         context: Context,
-        drawables: Drawables,
         life: Int
     ): Bitmap {
-        val width = getDimenInPx(context, R.dimen.lifeProgressSize)
-        val height = getDimenInPx(context, R.dimen.lifeProgressSize)
-        val progressLineWidth = getDimenInPx(context, R.dimen.lifeIndicatorProgressLineWidth)
-        val rect = RectF(
-            progressLineWidth,
-            progressLineWidth,
-            width - progressLineWidth,
-            height - progressLineWidth
+        val width = getDimenInPx(context, R.dimen.lifeProgressWidth)
+        val height = getDimenInPx(context, R.dimen.lifeProgressHeight)
+        val borderWidth = width * 0.3f
+
+        val maxLife = Constants.PLAYER_MAX_LIFE
+        val bgRect = RectF(
+            0f,
+            0f,
+            width,
+            height
+        )
+        val progressRect = RectF(
+            borderWidth,
+            height - (height * life / maxLife) + borderWidth,
+            width - borderWidth,
+            height - borderWidth
         )
 
         val progressBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = ContextCompat.getColor(context, R.color.lifeIndicatorBackground)
-            strokeWidth = progressLineWidth
+            color = ContextCompat.getColor(context, R.color.lifeIndicatorProgress)
+            strokeWidth = borderWidth
             style = Paint.Style.STROKE
         }
         val progressPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = ContextCompat.getColor(context, R.color.lifeIndicatorProgress)
-            strokeWidth = progressLineWidth
-            style = Paint.Style.STROKE
+            style = Paint.Style.FILL
         }
 
         val bitmap = Bitmap.createBitmap(width.toInt(), height.toInt(), Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
-        val maxLife = Constants.PLAYER_MAX_LIFE
-        canvas.drawArc(
-            rect,
-            -90f,
-            360f,
-            false,
+        canvas.drawRect(
+            bgRect,
             progressBackgroundPaint
         )
-        canvas.drawArc(
-            rect,
-            -90f,
-            -360.0f / maxLife * life,
-            false,
+        canvas.drawRect(
+            progressRect,
             progressPaint
         )
-
-        canvas.save()
-        canvas.rotate(45f, width / 2f, height / 2f)
-        val shipDrawable = drawables.getPlayerShip(1)
-        val shipWidth = width * 0.7f
-        val shipHeight = shipWidth * shipDrawable.intrinsicHeight / shipDrawable.intrinsicWidth
-        val shipPositionLeft = (width - shipWidth) / 2f
-        val shipPositionTop = (height - shipHeight) / 2f
-        shipDrawable.bounds = RectF(
-            shipPositionLeft,
-            shipPositionTop,
-            shipPositionLeft + shipWidth,
-            shipPositionTop + shipHeight
-        ).toRect()
-        shipDrawable.draw(canvas)
-        canvas.restore()
 
         return bitmap
     }

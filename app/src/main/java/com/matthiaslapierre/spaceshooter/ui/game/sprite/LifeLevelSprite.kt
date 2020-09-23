@@ -12,14 +12,12 @@ import com.matthiaslapierre.spaceshooter.resources.Drawables
 import com.matthiaslapierre.spaceshooter.util.Utils
 
 class LifeLevelSprite(
-    private val context: Context,
-    private val drawables: Drawables
+    private val context: Context
 ): ISprite {
 
     var currentLife: Int = 0
-    private var width: Float = Utils.getDimenInPx(context, R.dimen.lifeProgressSize)
-    private var height: Float = Utils.getDimenInPx(context, R.dimen.lifeProgressSize)
-    private val margin: Float = Utils.getDimenInPx(context, R.dimen.lifeMargin)
+    private var width: Float = Utils.getDimenInPx(context, R.dimen.lifeProgressWidth)
+    private var height: Float = Utils.getDimenInPx(context, R.dimen.lifeProgressHeight)
     private var x: Float = Constants.UNDEFINED
     private var y: Float = Constants.UNDEFINED
     private var isAlive: Boolean = true
@@ -30,18 +28,19 @@ class LifeLevelSprite(
             return
         }
 
-        val screenWidth = canvas.width.toFloat()
-        x = screenWidth - width - margin
-        y = margin
+        val bmp = Utils.generateLifeLevel(context, currentLife)
 
-        val bmp = Utils.generateLifeLevel(context, drawables, currentLife)
+        val screenWidth = canvas.width.toFloat()
+        val screenHeight = canvas.height.toFloat()
+        x = screenWidth - bmp.width
+        y = screenHeight * 0.3f
+
         canvas.drawBitmap(
             bmp,
             Rect(0, 0, bmp.width, bmp.height),
             getRectF().toRect(),
             globalPaint
         )
-        bmp.recycle()
     }
 
     override fun isAlive(): Boolean = isAlive
