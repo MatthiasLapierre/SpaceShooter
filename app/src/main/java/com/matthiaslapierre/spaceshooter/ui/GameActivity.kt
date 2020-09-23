@@ -1,14 +1,20 @@
 package com.matthiaslapierre.spaceshooter.ui
 
+import android.content.Context
 import android.graphics.Paint
 import android.graphics.PixelFormat
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.View
 import com.matthiaslapierre.spaceshooter.App
+import com.matthiaslapierre.spaceshooter.Constants
+import com.matthiaslapierre.spaceshooter.Constants.VIBRATION_DAMAGE_DURATION_MS
 import com.matthiaslapierre.spaceshooter.R
 import com.matthiaslapierre.spaceshooter.resources.Drawables
 import com.matthiaslapierre.spaceshooter.resources.Scores
@@ -24,6 +30,7 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
         private const val TAG = "GameActivity"
     }
 
+    private lateinit var vibrator: Vibrator
     private lateinit var drawables: Drawables
     private lateinit var typefaceHelper: TypefaceHelper
     private lateinit var soundEngine: SoundEngine
@@ -41,6 +48,8 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+
+        vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
         // Inject dependencies.
         val appContainer = (application as App).appContainer
@@ -123,8 +132,21 @@ class GameActivity : AppCompatActivity(), SurfaceHolder.Callback, View.OnTouchLi
         soundEngine.playGameOverMusic()
     }
 
-    override fun onHit() {
+    override fun onHit(playerShip: Boolean) {
         soundEngine.playShotHit()
+        if(playerShip) {
+            // Vibrate the device for a short after hitting a meteor or a laser shot
+            if (Build.VERSION.SDK_INT >= 26) {
+                vibrator.vibrate(
+                    VibrationEffect.createOneShot(
+                        VIBRATION_DAMAGE_DURATION_MS,
+                        VibrationEffect.DEFAULT_AMPLITUDE
+                    )
+                )
+            } else {
+                vibrator.vibrate(VIBRATION_DAMAGE_DURATION_MS)
+            }
+        }
     }
 
     override fun onPowerUpWin() {

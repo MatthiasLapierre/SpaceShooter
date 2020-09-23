@@ -57,4 +57,9 @@ object Constants {
 
     const val ENEMY_DAMAGE = 5
 
+    /**
+     * Vibration duration after hitting a meteor or a laser shot.
+     */
+    const val VIBRATION_DAMAGE_DURATION_MS = 150L
+
 }

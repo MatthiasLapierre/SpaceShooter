@@ -226,7 +226,7 @@ class GameProcessor(
                         gameInterface?.onMeteorExplode()
                     }
                 } else {
-                    gameInterface?.onHit()
+                    gameInterface?.onHit(livingSprite is PlayerSprite)
                 }
             }
         }
@@ -274,6 +274,7 @@ class GameProcessor(
         countMeteors = 0
         countEnemyShips = 0
         lastAddingTimestamp = 0
+        countPowerUpToGenerate = 0
     }
 
     /**
@@ -634,7 +635,7 @@ class GameProcessor(
     interface GameInterface {
         fun onGameStart()
         fun onGameOver()
-        fun onHit()
+        fun onHit(playerShip: Boolean)
         fun onPowerUpWin()
         fun onMeteorExplode()
         fun onShipExplode()
