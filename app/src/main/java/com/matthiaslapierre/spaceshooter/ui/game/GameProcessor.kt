@@ -266,7 +266,7 @@ class GameProcessor(
                 // If the sprite is died or damaged, we play sound effects.
                 if(livingSprite.life == 0) {
                     workSprites.add(ExplodeSprite(drawables, livingSprite.getRectF()))
-                    if(damagingSprite is EnemyShipSprite || damagingSprite is PlayerSprite) {
+                    if(livingSprite is EnemyShipSprite || livingSprite is PlayerSprite) {
                         gameInterface?.onShipExplode()
                     } else {
                         gameInterface?.onMeteorExplode()
