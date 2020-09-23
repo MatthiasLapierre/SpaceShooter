@@ -14,7 +14,7 @@ import com.matthiaslapierre.spaceshooter.util.Utils
 class MeteorSprite(
     context: Context,
     drawables: Drawables,
-    private var y: Float
+    var y: Float
 ): ISprite, ILiving, IDamaging {
 
     companion object {
@@ -75,8 +75,10 @@ class MeteorSprite(
 
     override fun isAlive(): Boolean = isAlive
 
-    override fun isHit(sprite: ISprite): Boolean = (isAlive() && sprite is PlayerSprite
-            && getRectF().intersect(sprite.getRectF()))
+    override fun isHit(sprite: ISprite): Boolean = isAlive()
+            && y >= 0
+            && sprite is PlayerSprite
+            && getRectF().intersect(sprite.getRectF())
 
     override fun getScore(): Int = points
 
