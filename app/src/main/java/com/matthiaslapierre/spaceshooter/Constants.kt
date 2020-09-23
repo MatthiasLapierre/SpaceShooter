@@ -90,18 +90,19 @@ object Constants {
      */
     const val INITIAL_DELAY_BEFORE_ADDING_ENEMY_SHIP_IN_SECONDS = 5L
 
-    const val STARS_MULTIPLIER = 0.05f
-
-    const val MIN_METEOR_MULTIPLIER = 0.001f
-
-    const val MAX_METEOR_MULTIPLIER = 0.004f
-
-    const val DELTA_METEOR_MULTIPLIER = 0.001f
-
+    /**
+     * Draw change to win the "Space ship upgrate" bonus.
+     */
     const val DRAW_CHANCE_BOLT = 20
 
+    /**
+     * Draw change to win the "Shield repair" bonus.
+     */
     const val DRAW_CHANCE_SHIELD = 35
 
-    const val DRAW_CHANCE_STAR = 45
+    const val STARS_MULTIPLIER = 0.05f
+    const val MIN_METEOR_MULTIPLIER = 0.001f
+    const val MAX_METEOR_MULTIPLIER = 0.004f
+    const val DELTA_METEOR_MULTIPLIER = 0.001f
 
 }

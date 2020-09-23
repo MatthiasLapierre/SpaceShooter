@@ -6,7 +6,6 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import androidx.core.graphics.toRect
-import com.matthiaslapierre.spaceshooter.Constants
 import com.matthiaslapierre.spaceshooter.Constants.LASER_DAMAGE
 import com.matthiaslapierre.spaceshooter.R
 import com.matthiaslapierre.spaceshooter.resources.Drawables

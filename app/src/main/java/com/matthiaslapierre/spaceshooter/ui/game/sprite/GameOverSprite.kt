@@ -27,14 +27,14 @@ class GameOverSprite(
     private val titleTextPaint: Paint by lazy {
         val paint = Paint()
         paint.textSize = Utils.getDimenInPx(context, R.dimen.gameOverTitleTextSize)
-        paint.typeface = typefaceHelper.getFutureTypeface();
+        paint.typeface = typefaceHelper.getFutureTypeface()
         paint.color = Color.WHITE
         paint
     }
     private val scoreTextPaint: Paint by lazy {
         val paint = Paint()
         paint.textSize = Utils.getDimenInPx(context, R.dimen.finalScoreTextSize)
-        paint.typeface = typefaceHelper.getFutureTypeface();
+        paint.typeface = typefaceHelper.getFutureTypeface()
         paint.color = Color.WHITE
         paint
     }

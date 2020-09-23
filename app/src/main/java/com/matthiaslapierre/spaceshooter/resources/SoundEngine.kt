@@ -156,16 +156,6 @@ class SoundEngine(
     fun playGameOverMusic() = playMusic(MUSIC_GAME_OVER)
 
     /**
-     * Stops the music.
-     */
-    fun stopMusic() {
-        if(player != null) {
-            player?.release()
-            player = null
-        }
-    }
-
-    /**
      * Plays a sound if it is in caches
      */
     private fun playSound(index: Int, volume: Float = 0.5f, infiniteLoop: Boolean = false) {
@@ -199,6 +189,16 @@ class SoundEngine(
             }
         } catch (e: IOException) {
             e.printStackTrace()
+        }
+    }
+
+    /**
+     * Stops the music.
+     */
+    private fun stopMusic() {
+        if(player != null) {
+            player?.release()
+            player = null
         }
     }
 

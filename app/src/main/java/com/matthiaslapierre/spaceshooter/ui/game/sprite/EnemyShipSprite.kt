@@ -30,26 +30,23 @@ class EnemyShipSprite(
      * Min x-coordinate that the space ship cannot exceed while moving.
      */
     var minX: Float = 0f
-
     /**
      * Max x-coordinate that the space ship cannot exceed while moving.
      */
     var maxX: Float = 0f
-
-    /**
-     * Speed on the x-coordinates.
-     */
-    var speedX: Float = 0f
-
-    /**
-     * Speed on the y-coordinates.
-     */
-    var speedY: Float = 0f
-
     /**
      * Timestamp of the last shot.
      */
     var lastShotTimestamp: Long = 0L
+
+    /**
+     * Speed on the x-coordinates.
+     */
+    private var speedX: Float = 0f
+    /**
+     * Speed on the y-coordinates.
+     */
+    private var speedY: Float = 0f
 
     private var drawable = drawables.getEnemyShip()
     private var width: Float = Utils.getDimenInPx(context, R.dimen.enemyShipWidth)

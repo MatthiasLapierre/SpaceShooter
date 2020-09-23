@@ -7,7 +7,6 @@ import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.util.Log
 import androidx.core.content.ContextCompat
 import com.matthiaslapierre.spaceshooter.Constants.EXPLODE_FRAMES_PER_LINE
 import com.matthiaslapierre.spaceshooter.Constants.EXPLODE_MAX_FRAMES
@@ -48,20 +47,57 @@ class Drawables(
     fun getMeteor(type: Int, size: Int): Drawable {
         val resIds: Array<Int> = when (type) {
             MeteorSprite.TYPE_BROWN -> when (size) {
-                MeteorSprite.SIZE_TINY -> arrayOf(R.drawable.meteor_brown_tiny1, R.drawable.meteor_brown_tiny2)
-                MeteorSprite.SIZE_SMALL -> arrayOf(R.drawable.meteor_brown_small1, R.drawable.meteor_brown_small2)
-                MeteorSprite.SIZE_MEDIUM -> arrayOf(R.drawable.meteor_brown_med1, R.drawable.meteor_brown_med2)
-                MeteorSprite.SIZE_BIG -> arrayOf(R.drawable.meteor_brown_big1, R.drawable.meteor_brown_big2)
-                else -> arrayOf(R.drawable.meteor_brown_tiny1, R.drawable.meteor_brown_tiny2)
+                MeteorSprite.SIZE_TINY -> arrayOf(
+                    R.drawable.meteor_brown_tiny1,
+                    R.drawable.meteor_brown_tiny2
+                )
+                MeteorSprite.SIZE_SMALL -> arrayOf(
+                    R.drawable.meteor_brown_small1,
+                    R.drawable.meteor_brown_small2
+                )
+                MeteorSprite.SIZE_MEDIUM -> arrayOf(
+                    R.drawable.meteor_brown_med1,
+                    R.drawable.meteor_brown_med2
+                )
+                MeteorSprite.SIZE_BIG -> arrayOf(
+                    R.drawable.meteor_brown_big1,
+                    R.drawable.meteor_brown_big2,
+                    R.drawable.meteor_brown_big3,
+                    R.drawable.meteor_brown_big4
+                )
+                else -> arrayOf(
+                    R.drawable.meteor_brown_tiny1,
+                    R.drawable.meteor_brown_tiny2
+                )
             }
             MeteorSprite.TYPE_GREY -> when (size) {
-                MeteorSprite.SIZE_TINY -> arrayOf(R.drawable.meteor_grey_tiny1, R.drawable.meteor_grey_tiny2)
-                MeteorSprite.SIZE_SMALL -> arrayOf(R.drawable.meteor_grey_small1, R.drawable.meteor_grey_small2)
-                MeteorSprite.SIZE_MEDIUM -> arrayOf(R.drawable.meteor_grey_med1, R.drawable.meteor_grey_med2)
-                MeteorSprite.SIZE_BIG -> arrayOf(R.drawable.meteor_grey_big1, R.drawable.meteor_grey_big2)
-                else -> arrayOf(R.drawable.meteor_grey_tiny1, R.drawable.meteor_grey_tiny2)
+                MeteorSprite.SIZE_TINY -> arrayOf(
+                    R.drawable.meteor_grey_tiny1,
+                    R.drawable.meteor_grey_tiny2
+                )
+                MeteorSprite.SIZE_SMALL -> arrayOf(
+                    R.drawable.meteor_grey_small1,
+                    R.drawable.meteor_grey_small2
+                )
+                MeteorSprite.SIZE_MEDIUM -> arrayOf(
+                    R.drawable.meteor_grey_med1,
+                    R.drawable.meteor_grey_med2
+                )
+                MeteorSprite.SIZE_BIG -> arrayOf(
+                    R.drawable.meteor_grey_big1,
+                    R.drawable.meteor_grey_big2,
+                    R.drawable.meteor_grey_big3,
+                    R.drawable.meteor_grey_big4
+                )
+                else -> arrayOf(
+                    R.drawable.meteor_grey_tiny1,
+                    R.drawable.meteor_grey_tiny2
+                )
             }
-            else -> arrayOf(R.drawable.meteor_brown_tiny1, R.drawable.meteor_brown_tiny2)
+            else -> arrayOf(
+                R.drawable.meteor_brown_tiny1,
+                R.drawable.meteor_brown_tiny2
+            )
         }
         val index = Utils.getRandomInt(0, resIds.size)
         return get(resIds[index])
@@ -119,7 +155,7 @@ class Drawables(
     /**
      * Gets the enemy ship.
      */
-    fun getEnemyShip(): Drawable = get(R.drawable.enemy_red_1)
+    fun getEnemyShip(): Drawable = get(R.drawable.enemy_red_2)
 
     /**
      * Gets an explosion frame.
@@ -171,7 +207,7 @@ class Drawables(
      */
     private fun splitExplosionAnimation(): List<Drawable> {
         val drawables = mutableListOf<Drawable>()
-        val fullBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.explode3)
+        val fullBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.explode)
         val frameSize = fullBitmap.width / EXPLODE_FRAMES_PER_LINE
         for(frame in 1 until EXPLODE_MAX_FRAMES + 1) {
             val line = ((frame - 1) / EXPLODE_FRAMES_PER_LINE)

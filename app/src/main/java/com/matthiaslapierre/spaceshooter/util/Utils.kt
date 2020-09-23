@@ -102,12 +102,12 @@ object Utils {
         )
 
         val progressBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = ContextCompat.getColor(context, R.color.lifeIndicatorProgress)
+            color = ContextCompat.getColor(context, R.color.lifeIndicator)
             strokeWidth = borderWidth
             style = Paint.Style.STROKE
         }
         val progressPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = ContextCompat.getColor(context, R.color.lifeIndicatorProgress)
+            color = ContextCompat.getColor(context, R.color.lifeIndicator)
             style = Paint.Style.FILL
         }
 

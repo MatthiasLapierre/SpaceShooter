@@ -8,7 +8,6 @@ import android.graphics.RectF
 import androidx.core.graphics.toRect
 import com.matthiaslapierre.spaceshooter.Constants
 import com.matthiaslapierre.spaceshooter.R
-import com.matthiaslapierre.spaceshooter.resources.Drawables
 import com.matthiaslapierre.spaceshooter.util.Utils
 
 /**

@@ -14,7 +14,6 @@
     <dimen name="starSize">5dp</dimen>
     <dimen name="starSpeedMin">1dp</dimen>
     <dimen name="starSpeedMax">3dp</dimen>
-    <dimen name="starInterval">20dp</dimen>
     <dimen name="meteorBigWidth">80dp</dimen>
     <dimen name="meteorMediumWidth">40dp</dimen>
     <dimen name="meteorSmallWidth">28dp</dimen>
@@ -22,12 +21,8 @@
     <dimen name="meteorSpeedMin">3dp</dimen>
     <dimen name="meteorSpeedMax">5dp</dimen>
     <dimen name="scoreDigitMargin">3dp</dimen>
-    <dimen name="lifeIconWidth">20dp</dimen>
-    <dimen name="lifeIconMargin">3dp</dimen>
-    <dimen name="lifeMargin">10dp</dimen>
     <dimen name="lifeProgressWidth">5dp</dimen>
     <dimen name="lifeProgressHeight">200dp</dimen>
-    <dimen name="lifeIndicatorProgressLineWidth">3dp</dimen>
     <dimen name="finalScoreTextSize">20sp</dimen>
     <dimen name="btnTitleTextSize">20sp</dimen>
     <dimen name="btnHeight">40dp</dimen>
