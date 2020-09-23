@@ -14,15 +14,15 @@ The genre's roots can be traced back to Spacewar!, one of the earliest computer 
 
 - Get Ready
 
-![Get Ready]https://github.com/MatthiasLapierre/SpaceShooter/blob/master/resources/readme_img/start.png)
+![Get Ready](https://github.com/MatthiasLapierre/SpaceShooter/blob/master/resources/readme_img/start.png)
 
 - Game start
 
-![Get Ready](https://github.com/MatthiasLapierre/SpaceShooter/blob/master/resources/readme_img/play.png)
+![Get start](https://github.com/MatthiasLapierre/SpaceShooter/blob/master/resources/readme_img/play.png)
 
 - Game Over
 
-![Get Ready](https://github.com/MatthiasLapierre/SpaceShooter/blob/master/resources/readme_img/game_over.png)
+![Game Over](https://github.com/MatthiasLapierre/SpaceShooter/blob/master/resources/readme_img/game_over.png)
 
 ## License
 
