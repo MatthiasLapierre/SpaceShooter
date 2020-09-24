@@ -2,9 +2,13 @@ package com.matthiaslapierre.spaceshooter
 
 import android.content.Context
 import com.matthiaslapierre.spaceshooter.resources.Drawables
-import com.matthiaslapierre.spaceshooter.resources.TypefaceHelper
 import com.matthiaslapierre.spaceshooter.resources.Scores
 import com.matthiaslapierre.spaceshooter.resources.SoundEngine
+import com.matthiaslapierre.spaceshooter.resources.TypefaceHelper
+import com.matthiaslapierre.spaceshooter.resources.impl.DrawablesImpl
+import com.matthiaslapierre.spaceshooter.resources.impl.ScoresImpl
+import com.matthiaslapierre.spaceshooter.resources.impl.SoundEngineImpl
+import com.matthiaslapierre.spaceshooter.resources.impl.TypefaceHelperImpl
 
 /**
  * To solve the issue of reusing objects, you can create your own dependencies container class
@@ -16,8 +20,8 @@ import com.matthiaslapierre.spaceshooter.resources.SoundEngine
 class AppContainer(
     context: Context
 ) {
-    val drawables = Drawables(context)
-    val typefaceHelper = TypefaceHelper(context.assets)
-    val soundEngine = SoundEngine(context.assets)
-    val scores = Scores()
+    val drawables: Drawables = DrawablesImpl(context)
+    val typefaceHelper: TypefaceHelper = TypefaceHelperImpl(context.assets)
+    val soundEngine: SoundEngine = SoundEngineImpl(context.assets)
+    val scores: Scores = ScoresImpl()
 }
