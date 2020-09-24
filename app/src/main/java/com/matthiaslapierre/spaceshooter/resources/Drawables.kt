@@ -164,7 +164,7 @@ class Drawables(
     fun getExplosionFrame(frame: Int): Drawable = get("explode_$frame".hashCode())
 
     /**
-     * Power-up. Space ship upgrate.
+     * Power-up. Space ship upgrade.
      */
     fun getPowerUpBolt() = get(R.drawable.powerup_bolt)
 

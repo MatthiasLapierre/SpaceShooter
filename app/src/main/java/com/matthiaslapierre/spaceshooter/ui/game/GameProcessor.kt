@@ -288,7 +288,7 @@ class GameProcessor(
                     && !powerUp.isConsumed) {
                     powerUp.isConsumed = true
                     when (powerUp.type) {
-                        PowerUpSprite.TYPE_BOLT -> player.upgrate()
+                        PowerUpSprite.TYPE_BOLT -> player.upgrade()
                         PowerUpSprite.TYPE_SHIELD -> player.life += (Constants.PLAYER_MAX_LIFE * 0.2f).toInt()
                         PowerUpSprite.TYPE_STAR -> points += BONUS_POINTS
                         else -> points += BONUS_POINTS

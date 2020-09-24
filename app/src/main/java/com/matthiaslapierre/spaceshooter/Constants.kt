@@ -91,7 +91,7 @@ object Constants {
     const val INITIAL_DELAY_BEFORE_ADDING_ENEMY_SHIP_IN_SECONDS = 5L
 
     /**
-     * Draw change to win the "Space ship upgrate" bonus.
+     * Draw change to win the "Space ship upgrade" bonus.
      */
     const val DRAW_CHANCE_BOLT = 20
 

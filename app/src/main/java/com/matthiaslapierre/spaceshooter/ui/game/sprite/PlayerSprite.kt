@@ -121,9 +121,9 @@ class PlayerSprite(
     }
 
     /**
-     * Upgrate the space ship.
+     * Upgrade the space ship.
      */
-    fun upgrate() {
+    fun upgrade() {
         type++
     }
 

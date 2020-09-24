@@ -23,7 +23,7 @@ class PowerUpSprite(
 
     companion object {
         /**
-         * Space ship upgrate.
+         * Space ship upgrade.
          */
         const val TYPE_BOLT = 0
 
