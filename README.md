@@ -6,7 +6,7 @@ The genre's roots can be traced back to Spacewar!, one of the earliest computer 
 
 ## How to play
 
-1. [Download](https://github.com/MatthiasLapierre/SpaceShooter/blob/master/resources/apk/spaceshooter.apk) and install the game.
+1. [Download](https://github.com/MatthiasLapierre/SpaceShooter/releases/download/1.0/spaceshooter.apk) and install the game.
 2. Start the game. Tap the screen to start.
 3. Move the spaceship with your finger. Avoid collisions with meteors. Avoid enemy fire. Shoot at meteors and enemy spaceships to destroy them.
 
